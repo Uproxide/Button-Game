@@ -1,0 +1,69 @@
+{
+    "env": {
+        "defaultIncludePath": [
+            "${workspaceFolder}/include/**"
+        ],
+        "defaultDefines": [],
+        "ctrIncludePaths": [
+            "${env:DEVKITPRO}/libctru/include/**",
+            "${env:DEVKITPRO}/portlibs/3ds/include/**"
+        ],
+        "ctrDefines": [
+            "__3DS__"
+        ],
+        "ctrCompilerPath": "${env:DEVKITPRO}/devkitARM/bin/arm-none-eabi-gcc",
+        "hacIncludePaths": [
+            "${env:DEVKITPRO}/libnx/include/**",
+            "${env:DEVKITPRO}/portlibs/switch/include/**"
+        ],
+        "hacDefines": [
+            "__SWITCH__",
+            "__BSD_VISIBLE"
+        ],
+        "hacCompilerPath": "${env:DEVKITPRO}/devkitA64/bin/aarch64-none-elf-g++",
+        "rvlIncludePaths": [
+            "${env:DEVKITPRO}/portlibs/ppc/include/**",
+            "${env:DEVKITPRO}/portlibs/wii/include/**",
+            "${env:DEVKITPRO}/libogc/include/**"
+        ],
+        "rvlDefines": [
+            "HW_RVL"
+        ],
+        "dolIncludePaths": [
+            "${env:DEVKITPRO}/portlibs/ppc/include/**",
+            "${env:DEVKITPRO}/portlibs/gamecube/include/**",
+            "${env:DEVKITPRO}/libogc/include/**"
+        ],
+        "dolDefines": [
+            "HW_DOL"
+        ],
+        "cafeIncludePaths": [
+            "${env:DEVKITPRO}/portlibs/ppc/include/**",
+            "${env:DEVKITPRO}/portlibs/wiiu/include/**",
+            "${env:DEVKITPRO}/wut/include/**",
+            "${env:DEVKITPRO}/wut/usr/include/**"
+        ],
+        "cafeDefines": [
+            "__WIIU__"
+        ],
+        "ppcCompilerPath": "${env:DEVKITPRO}/devkitPPC/bin/powerpc-eabi-g++"
+    },
+    "configurations": [
+        {
+            "name": "Wii",
+            "includePath": [
+                "${env:defaultIncludePath}",
+                "${env:rvlIncludePaths}"
+            ],
+            "defines": [
+                "${env:defaultDefines}",
+                "${env:rvlDefines}"
+            ],
+            "compilerPath": "${env:ppcCompilerPath}",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm"
+        }
+    ],
+    "version": 4
+}
