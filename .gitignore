@@ -1,4 +1,12 @@
-
+# build folders
 /build
+
+# built files/dols and elfs
 *.dol
 *.elf
+# dols and elfs in button gam  e
+ButtonGame/*.dol
+ButtonGame/*.elf
+
+# packaging stuff
+ButtonGame*.zip

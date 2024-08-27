@@ -1,0 +1,64 @@
+name: Build
+
+on: 
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Build Button Game
+    runs-on: ubuntu-latest
+
+    container:
+      image: docker://devkitpro/devkitppc
+      options: --cpus 2
+    
+    steps:
+      - name: Installing essentials
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential zip unzip
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: PreBuild Actions
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Build
+        run: |
+          make
+          make package pkgwappswithoutdeletingappsfolder
+          mkdir appsgohereyay
+          cp apps ./appsgohereyay -r
+
+      - name: Upload DOL
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame.dol
+          path: ButtonGame.dol
+
+      - name: Upload ELF
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame.elf
+          path: ButtonGame.elf
+
+      - name: Upload packaged folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame
+          path: ButtonGame
+
+      - name: Upload packaged folder with apps folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame - with apps folder
+          path: appsgohereyay
+
+      - name: Clean up build files
+        run: |
+          rm -fr appsgohereyay
+          make pkgwapps clean

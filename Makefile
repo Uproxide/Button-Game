@@ -15,7 +15,7 @@ include $(DEVKITPPC)/wii_rules
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	/ButtonGame/boot
+TARGET		:=	ButtonGame
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data  
@@ -98,21 +98,47 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-	@rm -fr $(OUTPUT).elf
 
 #---------------------------------------------------------------------------------
 clean:
-	@echo clean ...
-	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol
+	@echo cleaning build files ...
+	@rm -fr $(BUILD)
+	@echo cleaning dol and elf files in root project directory ...
+	@rm -fr $(OUTPUT).elf $(OUTPUT).dol
+	@echo cleaning dol and elf files in package directory ...
+	@rm -fr $(OUTPUT)/boot.elf $(OUTPUT)/boot.dol $(OUTPUT)/$(TARGET).elf $(OUTPUT)/$(TARGET).dol
+	@echo cleaning packaged zip ...
+	@rm -fr $(OUTPUT)*.zip
+	@echo cleaning done!
 
 #---------------------------------------------------------------------------------
 run:
-	psoload $(TARGET).dol
+	wiiload $(TARGET).dol
 
 #---------------------------------------------------------------------------------
-reload:
-	psoload -r $(TARGET).dol
+dol2pkgfdr:
+	@rm -fr $(OUTPUT)/boot.dol
+	@cp $(OUTPUT).dol $(OUTPUT)/boot.dol
 
+#---------------------------------------------------------------------------------
+package: | dol2pkgfdr
+#@#echo "seeing if you have zip and unzip installed... (installing them if you don't)"
+#@#{ pacman -Q "zip" || pacman -S --noconfirm zip;};  { pacman -Q "unzip" || pacman -S --noconfirm unzip; }
+	@echo zipping up the package...
+	@cd $(OUTPUT) && zip -r ../$(TARGET).zip *
+
+#---------------------------------------------------------------------------------
+pkgwapps: | pkgwappswithoutdeletingappsfolder # mainly for release stuffs
+	@rm -fr apps
+
+#---------------------------------------------------------------------------------
+pkgwappswithoutdeletingappsfolder: | dol2pkgfdr # mainly for release stuffs
+#@echo "seeing if you have zip and unzip installed... (installing them if you don't)"
+#@#{ pacman -Q "zip" || pacman -S --noconfirm zip;};  { pacman -Q "unzip" || pacman -S --noconfirm unzip; }
+	@mkdir -p apps
+	@cp -r $(OUTPUT) apps/$(TARGET)
+	@echo zipping up the package...
+	@zip -r "$(TARGET) - with apps folder.zip" apps/*
 
 #---------------------------------------------------------------------------------
 else

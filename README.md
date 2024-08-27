@@ -1,11 +1,8 @@
 # Button Game
-
-## About
-Button Game is a Very Simple Cookie Clicker Like game for the Wii.
+A very cool game where you click A and it will also click for you!
 
 ## How to Play
 A to Click
-B to Upgrade PPC (Points Per Click) Every 50 Points
-HOME to Close and Save
-UP to Load Save
-DOWN to Save Data (Do this at the beginning only if you want to Restart your Points/PPC)
+DPAD Left to go to the previous page
+DPAD Right to go to the next page
+DPAD Up and Down to switch the selected option

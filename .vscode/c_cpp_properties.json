@@ -1,63 +1,58 @@
 {
     "env": {
+        "devkitProWindows": "C:/devkitpro",
         "defaultIncludePath": [
             "${workspaceFolder}/include/**"
         ],
         "defaultDefines": [],
-        "ctrIncludePaths": [
-            "${env:DEVKITPRO}/libctru/include/**",
-            "${env:DEVKITPRO}/portlibs/3ds/include/**"
-        ],
-        "ctrDefines": [
-            "__3DS__"
-        ],
-        "ctrCompilerPath": "${env:DEVKITPRO}/devkitARM/bin/arm-none-eabi-gcc",
-        "hacIncludePaths": [
-            "${env:DEVKITPRO}/libnx/include/**",
-            "${env:DEVKITPRO}/portlibs/switch/include/**"
-        ],
-        "hacDefines": [
-            "__SWITCH__",
-            "__BSD_VISIBLE"
-        ],
-        "hacCompilerPath": "${env:DEVKITPRO}/devkitA64/bin/aarch64-none-elf-g++",
         "rvlIncludePaths": [
             "${env:DEVKITPRO}/portlibs/ppc/include/**",
             "${env:DEVKITPRO}/portlibs/wii/include/**",
             "${env:DEVKITPRO}/libogc/include/**"
         ],
+        "rvlIncludePathsWindows": [
+            "${env:devkitProWindows}/portlibs/ppc/include/**",
+            "${env:devkitProWindows}/portlibs/wii/include/**",
+            "${env:devkitProWindows}/libogc/include/**"
+        ],
         "rvlDefines": [
-            "HW_RVL"
+            "HW_RVL",
+            "GEKKO"
         ],
-        "dolIncludePaths": [
-            "${env:DEVKITPRO}/portlibs/ppc/include/**",
-            "${env:DEVKITPRO}/portlibs/gamecube/include/**",
-            "${env:DEVKITPRO}/libogc/include/**"
-        ],
-        "dolDefines": [
-            "HW_DOL"
-        ],
-        "cafeIncludePaths": [
-            "${env:DEVKITPRO}/portlibs/ppc/include/**",
-            "${env:DEVKITPRO}/portlibs/wiiu/include/**",
-            "${env:DEVKITPRO}/wut/include/**",
-            "${env:DEVKITPRO}/wut/usr/include/**"
-        ],
-        "cafeDefines": [
-            "__WIIU__"
-        ],
-        "ppcCompilerPath": "${env:DEVKITPRO}/devkitPPC/bin/powerpc-eabi-g++"
+        "ppcCompilerPath": "${env:DEVKITPRO}/devkitPPC/bin/powerpc-eabi-g++",
+        "ppcCompilerPathWindows": "${env:devkitProWindows}/devkitPPC/bin/powerpc-eabi-g++"
     },
     "configurations": [
         {
-            "name": "Wii",
+            "name": "Wii (Windows)",
+            "includePath": [
+                "${env:defaultIncludePath}",
+                "${env:rvlIncludePathsWindows}"
+            ],
+            "defines": [
+                "${env:defaultDefines}",
+                "${env:rvlDefines}",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "${env:ppcCompilerPathWindows}",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm"
+        },
+        {
+            "name": "Wii (Linux)",
             "includePath": [
                 "${env:defaultIncludePath}",
                 "${env:rvlIncludePaths}"
             ],
             "defines": [
                 "${env:defaultDefines}",
-                "${env:rvlDefines}"
+                "${env:rvlDefines}",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
             ],
             "compilerPath": "${env:ppcCompilerPath}",
             "cStandard": "c11",

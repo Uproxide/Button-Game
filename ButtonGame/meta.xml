@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="1">
+	<name>Button Game</name>
+	<coder>Uproxide, Cooper</coder>
+	<version>1.0.0</version>
+	<short_description>A pretty simple Clicker Game, for the Wii (as well as Wii Mini and vWii)!</short_description> 
+	<long_description>Button Game
+A very simple Clicker Game, for the Wii! (also works on Wii Mini and vWii)
+
+Pretty much a remake of my first wii game by the same name.
+
+Press A to Select/Click, Up and Down on the D-Pad to Navigate Menus, and Left/Right on the D-Pad to Change Pages.
+
+Thank you Cooper for testing and helping!</long_description> 
+</app>
