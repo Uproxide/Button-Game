@@ -4,7 +4,9 @@
         "defaultIncludePath": [
             "${workspaceFolder}/include/**"
         ],
-        "defaultDefines": [],
+        "defaultDefines": [
+            "DEV"
+        ],
         "rvlIncludePaths": [
             "${env:DEVKITPRO}/portlibs/ppc/include/**",
             "${env:DEVKITPRO}/portlibs/wii/include/**",

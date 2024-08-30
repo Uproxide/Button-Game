@@ -60,33 +60,33 @@ void printOptionsSelection(int index) {
 
     switch (index) {
         case 0:
-            printf("Options\n------------------------\n> Save Data\nErase Save (Soon)");
+            printf("Options\n------------------------\n> Save Data\nErase Save");
             break;
         case 1:
-            printf("Options\n------------------------\nSave Data\n> Erase Save (Soon)");
+            printf("Options\n------------------------\nSave Data\n> Erase Save");
+            break;
+        case 6:
+            printf("ooga booga :3 this is coopers little easter egg for rn, to go back, press up on the dpad. :3");
+            break;
+
+        // KEEP THESE AT BOTTOM
+        case 2:
+            printf("Options > Erase Data\n------------------------\n> No thanks.\nYes I am sure.");
+            break;
+        case 3:
+            printf("Options > Erase Data\n------------------------\nNo thanks.\n> Yes I am sure.");
+            break;
+        case 4:
+            printf("Options > Erase Data\n------------------------\nYes I am REALLY sure.\n> No thanks.");
+            break;
+        case 5:
+            printf("Options > Erase Data\n------------------------\n> Yes I am REALLY sure.\nNo thanks.");
             break;
         default:
-            printf("Options\n------------------------\nSave Data\nErase Save (Soon)");
+            printf("Options\n------------------------\nSave Data\nErase Save");
             break;
     }
     printf("\n------------------------\nPage %d", page);
-}
-
-void printDeleteDataPrompt(int index) {
-	printf("\x1b[2J");
-    printf("\x1b[H");
-
-    switch (index) {
-        case 0:
-            printf("Are you sure?\n------------------------\n> Yes, Delete my Save.  |  No, Keep Save.");
-            break;
-        case 1:
-            printf("Are you sure?\n------------------------\nYes, Delete my Save.  |  > No, Keep Save.");
-            break;
-        default:
-            printf("Are you sure?\n------------------------\nYes, Delete my Save.  |  No, Keep Save.");
-            break;
-    }
 }
 
 void printPage(int p) {
@@ -102,7 +102,7 @@ void printPage(int p) {
             printUpgradesSelection(upgradeIndex);
             break;
 		case 3:
-            printOptionsSelection(upgradeIndex);
+            printOptionsSelection(optionsIndex);
             break;
 		case 4:
 			printf("Credits\n------------------------\nUproxide - Creator/Lead Developer\nCooper - Developer/Tester\nTheHighTide - Insporation\nMr. Bones - bones");
@@ -161,14 +161,15 @@ void saveData() {
 }
 
 void deleteData() {
-	FILE* save = fopen("sd:/apps/ButtonGame/ithink.mayoisasillybeast", "w+");
-	clicks = 0;
-	cpc = 1;
-	cps = 0;
-	cpcPrice = 25;
-	cpsPrice = 100;
-	fprintf(save, "%d\n%d\n%d\n%d\n%d", clicks, cpc, cps, cpcPrice, cpsPrice);
-	fclose(save);
+	if (remove("sd:/apps/ButtonGame/ithink.mayoisasillybeast") == 0) {
+        clicks = 0;
+        cpc = 1;
+        cps = 0;
+        cpcPrice = 25;
+        cpsPrice = 100;
+        printf("Data deleted successfully");
+    } else
+        printf("Unable to delete the file");
 }
 
 int main(int argc, char **argv) {
@@ -195,29 +196,33 @@ int main(int argc, char **argv) {
         u32 pressed = WPAD_ButtonsDown(0);
 
         if (pressed & WPAD_BUTTON_LEFT) {
-            if (page == 1) {
-                printPage(page);
+            if (optionsIndex < 2) {
+                if (page == 1) {
+                    printPage(page);
+                } else {
+                    page -= 1;
+                    printPage(page);
+                }
             } else {
-				/* if (page == 4 & deletedata) {
-					deleteDataIndex == 0;
-					printDeleteDataPrompt(deleteDataIndex);
-				} else { */
-				page -= 1;
-                printPage(page);
+                //printf("\nPage %d\n", page);
+                //printf("Options Index %d\n", optionsIndex);
             }
         }
 
         if (pressed & WPAD_BUTTON_RIGHT) {
-			/* if (page == 4 & deletedata) {
-				deleteDataIndex == 1;
-				printDeleteDataPrompt(deleteDataIndex);
-			} else { */
-			if (page == 4) {
-				printPage(page);
-			} else {
-				page += 1;
-				printPage(page);				
-			}
+            if (optionsIndex < 2) {
+                #ifdef DEV
+                page += 1;
+                printPage(page);
+                #else
+                if (page == 4) {
+                    printPage(page);
+                } else {
+                    page += 1;
+                    printPage(page);
+                }
+                #endif
+            }
 
         }
 
@@ -231,11 +236,18 @@ int main(int argc, char **argv) {
                     }
                     printUpgradesSelection(upgradeIndex);
                 }
-            } else if (page == 3) {
-                if (optionsIndex == 1) {
+            } else if (page == 3) { 
+                if (optionsIndex == 2 || optionsIndex == 3) {
+                    optionsIndex = 3;
+                    printOptionsSelection(optionsIndex);
+                } else if (optionsIndex == 4 || optionsIndex == 5) {
+                    optionsIndex = 4;
+                    printOptionsSelection(optionsIndex);
+                } else if (optionsIndex == 1) {
+                    optionsIndex = 6;
                     printOptionsSelection(optionsIndex);
                 } else {
-                    if (!(optionsIndex == 1)) {
+                    if (!(optionsIndex == 6)) {
                         optionsIndex += 1;
                     }
                     printOptionsSelection(optionsIndex);
@@ -248,18 +260,23 @@ int main(int argc, char **argv) {
                 if (upgradeIndex == 0) {
                     printUpgradesSelection(upgradeIndex);
                 } else {
-                    if (upgradeIndex == 1) {
-                        upgradeIndex -= 1;
-                    }
+                    upgradeIndex -= 1;
                     printUpgradesSelection(upgradeIndex);
                 }
             } else if (page == 3) {
-                if (optionsIndex == 0) {
+                if (optionsIndex == 2 || optionsIndex == 3) {
+                    optionsIndex = 2;
+                    printOptionsSelection(optionsIndex);
+                } else if (optionsIndex == 4 || optionsIndex == 5) {
+                    optionsIndex = 5;
+                    printOptionsSelection(optionsIndex);
+                } else if (optionsIndex == 0) {
+                    printOptionsSelection(optionsIndex);
+                } else if (optionsIndex == 6) {
+                    optionsIndex = 1;
                     printOptionsSelection(optionsIndex);
                 } else {
-                    if (optionsIndex == 1) {
-                        optionsIndex -= 1;
-                    }
+                    optionsIndex -= 1;
                     printOptionsSelection(optionsIndex);
                 }
             } else {
@@ -267,7 +284,7 @@ int main(int argc, char **argv) {
 			}
         }
 
-        if (pressed & WPAD_BUTTON_HOME) {
+        if (pressed & WPAD_BUTTON_HOME && optionsIndex < 2) {
 			printf("\x1b[2J");
     		printf("\x1b[H");
 
@@ -303,10 +320,23 @@ int main(int argc, char **argv) {
 					if (optionsIndex == 0) {
 						saveData();
 						printf("\nData Saved!");
-					} /* else if (optionsIndex == 1) {
-						page == 4;
-						printDeleteDataPrompt(deleteDataIndex);
-					} */
+					} else if (optionsIndex == 1) {
+						optionsIndex = 2;
+						printOptionsSelection(optionsIndex);
+					} else if (optionsIndex == 3) {
+						optionsIndex = 4;
+						printOptionsSelection(optionsIndex);
+					} else if (optionsIndex == 4 || optionsIndex == 2) {
+						optionsIndex = 1;
+						printOptionsSelection(optionsIndex);
+					} else if (optionsIndex == 5) {
+                        printf("\nDeleting Data...\n");
+                        deleteData();
+                        sleep(3);
+                        page = 1;
+                        optionsIndex = 0;
+						printPage(page);
+                    }
 					break;
 				/* case 4: 
 					if (deleteDataIndex == 0) {

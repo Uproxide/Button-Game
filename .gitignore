@@ -10,3 +10,7 @@ ButtonGame/*.elf
 
 # packaging stuff
 ButtonGame*.zip
+apps/*
+appsgohere/*
+apps/
+appsgohere/
