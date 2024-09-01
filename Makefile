@@ -29,11 +29,12 @@ RELEASE = 0 # options are 0 or 1
 #---------------------------------------------------------------------------------
 # version stuff
 #---------------------------------------------------------------------------------
-READXML := read_xml () { local IFS=\> ; read -d \< ENTITY CONTENT ; } ;
-VERSION := $(shell $(READXML) meta=$(TARGET)/meta.xml; if [ "$(BUILD)" == "$(notdir $(CURDIR))" ]; then meta="../$${meta}"; fi; while read_xml; do if [[ $$ENTITY == "version" ]]; then echo $${CONTENT//[$$'\t\r\n ']}; break; fi; done < $$meta)
+READXML := read_xml () { local IFS=\>; read -d \< ENTITY CONTENT; };
+VERSION_GET_IFBUILD = if [ "$(BUILD)" == "$(notdir $(CURDIR))" ]; then meta="../$${meta}"; fi;
+VERSION := $(shell $(READXML) meta=$(TARGET)/meta.xml; $(VERSION_GET_IFBUILD) while read_xml; do if [[ $$ENTITY == "version" ]]; then echo $${CONTENT//[$$'\t\r\n ']}; break; fi; done < $$meta)
 VERSION_MAJOR := $(shell echo $(VERSION) | cut -d. -f1)
 VERSION_MINOR := $(shell echo $(VERSION) | cut -d. -f2)
-VERSION_PATCH := $(shell echo $(VERSION) | cut -d. -f3)
+VERSION_PATCH := $(shell echo $(VERSION) | cut -d. -f3 | cut -d- -f1 | cut -d+ -f1)
 VERSION_PRE := $(shell echo $(VERSION) | cut -d- -f2 | cut -d. -f1 | cut -d+ -f1)
 VERSION_BUILD := $(shell echo $(VERSION) | cut -d+ -f2 | cut -d. -f1 )
 VERSION_PRERELEASE := $(shell echo $(VERSION) | cut -d- -f2 | cut -d. -f2 | cut -d+ -f1)
